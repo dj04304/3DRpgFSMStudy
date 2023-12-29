@@ -9,9 +9,16 @@ public class PlayerSaveJson : MonoBehaviour
     public TextMeshProUGUI nameInput;
     public Button createButton;
 
+    public Button gameStartButton;
+    public Image loginPanel;
+    public Image completeText;
+
     private void Start()
     {
+        StopAllCoroutines();
+
         CreateJsonButtonEvent();
+
     }
 
     private void CreateJsonButtonEvent()
@@ -28,23 +35,39 @@ public class PlayerSaveJson : MonoBehaviour
 
         Debug.Log(playerData.PlayerName);
 
-        string name = JsonUtility.ToJson(playerData);
+        //string name = JsonUtility.ToJson(playerData);
 
+        JsonDataManager.Instance.SaveToJson(playerData);
 
-        JsonDataManager.Instance.SaveToJson(playerData, GetPlayerDataPath());
+        CompleteCreateData();
 
     }
 
-    private string GetPlayerDataPath()
+    private void CompleteCreateData()
     {
-        Debug.Log("저장 성공!");
+        loginPanel.gameObject.SetActive(false);
 
-        string timeStamp = System.DateTime.Now.ToString("yyyyMMdd_HHmmss");
+        completeText.gameObject.SetActive(true);
 
-        string fileName = "/07.JSON/layerData_" + timeStamp + ".json";
+        gameStartButton.interactable = true;
 
-        return Application.dataPath + fileName;
+        Invoke("TextActiveTime", 2f);
+
+        //StartCoroutine(TextActiveTime());
 
     }
+
+    private void TextActiveTime()
+    {
+        completeText.gameObject.SetActive(false);
+    
+    }
+
+    //IEnumerator TextActiveTime()
+    //{
+    //    yield return new WaitForSecondsRealtime(1.5f);
+
+    //    completeText.gameObject.SetActive(false);
+    //}
 
 }

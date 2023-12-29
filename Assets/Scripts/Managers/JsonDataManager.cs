@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class JsonDataManager : MonoBehaviour
 {
+    public PlayerSO playerSO;
+
     /// <summary>
     /// JsonData 싱글톤
     /// </summary>
@@ -40,30 +42,70 @@ public class JsonDataManager : MonoBehaviour
         }
     }
 
-    public void SaveToJson<T>(T Data, string filePath)
+    public void SaveToJson<T>(T Data)
     {
         Debug.Log(Data);
         //Debug.Log(filePath);
 
         string json = JsonUtility.ToJson(Data);
 
-        string path = Path.Combine(filePath);
+        string path = GetPlayerDataPath();
 
         Debug.Log("Json" + json);
         File.WriteAllText(path, json);
     }
 
-    public T LoadFromJson<T>(string filePath)
+    public T LoadFromJson<T>()
     {
-        if(File.Exists(filePath))
+       
+
+        // Json 파일이 저장된 디렉토리 경로
+        string directoryPath = Path.Combine(Application.dataPath + "/07.JSON");
+
+       //Debug.Log(directoryPath);
+
+        // 디렉토리에 있는 모든 Json 파일 가져오기
+        string[] jsonFiles = Directory.GetFiles(directoryPath, "PlayerData_*.json");
+
+        //Debug.Log(jsonFiles.Length);
+
+        if(jsonFiles.Length > 0)
         {
-            string json = File.ReadAllText(filePath);
-            return JsonUtility.FromJson<T>(json);
+
+            string filePath = jsonFiles[jsonFiles.Length - 1];
+            string jsonData = File.ReadAllText(filePath);
+
+            //Debug.Log(filePath);
+            Debug.Log("데이터 불러오기 성공!");
+
+            T loadedData = JsonUtility.FromJson<T>(jsonData);
+
+            Debug.Log(loadedData);
+
+            if (loadedData is PlayerData playerData)
+            {
+                playerSO.playerData.PlayerName = playerData.PlayerName;
+
+                Debug.Log("playerName " + playerData.PlayerName);
+            }
+
+            return JsonUtility.FromJson<T>(jsonData);
+
         }
         else
         {
             return default(T);
         }
+
+    }
+
+    private string GetPlayerDataPath()
+    {
+        string timeStamp = System.DateTime.Now.ToString("yyyyMMdd_HHmmss");
+
+        string fileName = "/07.JSON/PlayerData_" + timeStamp + ".json";
+
+        return Path.Combine(Application.dataPath + fileName);
 
     }
 

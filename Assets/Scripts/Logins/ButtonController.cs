@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UISetting : MonoBehaviour
+public class ButtonController : MonoBehaviour
 {
     public Button newDataButton;
     public Button loadDataButton;
