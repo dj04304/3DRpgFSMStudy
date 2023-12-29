@@ -53,6 +53,15 @@ public class JsonDataManager : MonoBehaviour
 
         Debug.Log("Json" + json);
         File.WriteAllText(path, json);
+
+        /// SO에 담는 과정
+        if (Data is PlayerData playerData)
+        {
+            playerSO.playerData.PlayerName = playerData.PlayerName;
+
+            Debug.Log("playerName " + playerData.PlayerName);
+        }
+
     }
 
     public T LoadFromJson<T>()
@@ -82,6 +91,7 @@ public class JsonDataManager : MonoBehaviour
 
             Debug.Log(loadedData);
 
+            /// SO에 담는 과정
             if (loadedData is PlayerData playerData)
             {
                 playerSO.playerData.PlayerName = playerData.PlayerName;
