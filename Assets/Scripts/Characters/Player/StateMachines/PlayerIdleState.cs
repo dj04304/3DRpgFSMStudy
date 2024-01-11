@@ -25,6 +25,7 @@ public class PlayerIdleState : PlayerGroundState
     {
         base.Update();
 
+        // 이동이 일어났다면
         if(stateMachine.MovementInput != Vector2.zero)
         {
             OnMove();

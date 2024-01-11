@@ -52,8 +52,8 @@ public class PlayerBaseState : IState
     protected virtual void RemoveInputActionsCallbacks()
     {
         PlayerInput input = stateMachine.Player.Input;
-        input.PlayerActions.Movement.canceled += OnMovementCanceled;
-        input.PlayerActions.Run.started += OnRunStarted;
+        input.PlayerActions.Movement.canceled -= OnMovementCanceled;
+        input.PlayerActions.Run.started -= OnRunStarted;
     }
 
     protected virtual void OnRunStarted(InputAction.CallbackContext context)
